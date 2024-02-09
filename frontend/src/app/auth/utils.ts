@@ -24,12 +24,13 @@ const getToken = (type: string) => {
 
 /**
  * Registers a new user.
- * @param {string} email - The email of the user.
+ * @param {string} email - The email of the account.
+ * @param {string} username - The username of the account.
  * @param {string} password - The password for the account.
  * @returns {Promise} A promise that resolves with the registration response.
  */
-const register = (email: string, password: string) => {
-  return api.post({ email, password }, "/auth/users/");
+const register = (email: string, username: string, password: string) => {
+  return api.post({ email, username, password }, "/auth/users/");
 };
 
 /**
