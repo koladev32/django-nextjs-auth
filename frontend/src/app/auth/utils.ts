@@ -1,36 +1,78 @@
 import wretch from "wretch";
 import Cookies from "js-cookie";
 
-const api = wretch("http://localhost:8000")
-  .accept("application/json")
-  .accept("application/json");
+// Base API setup for making HTTP requests
+const api = wretch("http://localhost:8000").accept("application/json");
 
-const storeToken = (access: string) => {
-  Cookies.set("accessToken", access);
+/**
+ * Stores a token in cookies.
+ * @param {string} token - The token to be stored.
+ * @param {"access" | "refresh"} type - The type of the token (access or refresh).
+ */
+const storeToken = (token: string, type: "access" | "refresh") => {
+  Cookies.set(type + "Token", token);
 };
 
-const getAccessToken = () => {
-  return Cookies.get("accessToken");
-};
-const getRefreshToken = () => {
-  return Cookies.get("refreshToken");
+/**
+ * Retrieves a token from cookies.
+ * @param {"access" | "refresh"} type - The type of the token to retrieve (access or refresh).
+ * @returns {string | undefined} The token, if found.
+ */
+const getToken = (type: string) => {
+  return Cookies.get(type + "Token");
 };
 
+/**
+ * Registers a new user.
+ * @param {string} email - The email of the user.
+ * @param {string} password - The password for the account.
+ * @returns {Promise} A promise that resolves with the registration response.
+ */
 const register = (email: string, password: string) => {
   return api.post({ email, password }, "/auth/users/");
 };
+
+/**
+ * Logs in a user and stores access and refresh tokens.
+ * @param {string} email - The user's email.
+ * @param {string} password - The user's password.
+ * @returns {Promise} A promise that resolves with the login response.
+ */
 const login = (email: string, password: string) => {
-  return api.post({ email, password }, "/auth/jwt/create");
+  return api
+    .post({ username: email, password }, "/auth/jwt/create")
+    .json((json) => {
+      storeToken(json.access, "access");
+      storeToken(json.refresh, "refresh");
+    });
 };
 
+/**
+ * Refreshes the JWT token using the stored refresh token.
+ * @returns {Promise} A promise that resolves with the new access token.
+ */
 const handleJWTRefresh = () => {
-  const refreshToken = getRefreshToken();
+  const refreshToken = getToken("refresh");
   return api.post({ refresh: refreshToken }, "/auth/jwt/refresh");
 };
+
+/**
+ * Initiates a password reset request.
+ * @param {string} email - The email of the user requesting a password reset.
+ * @returns {Promise} A promise that resolves with the password reset response.
+ */
 const resetPassword = (email: string) => {
   return api.post({ email }, "/users/reset_password");
 };
 
+/**
+ * Confirms the password reset with new password details.
+ * @param {string} new_password - The new password.
+ * @param {string} re_new_password - Confirmation of the new password.
+ * @param {string} token - The token for authenticating the password reset request.
+ * @param {string} uid - The user ID.
+ * @returns {Promise} A promise that resolves with the password reset confirmation response.
+ */
 const resetPasswordConfirm = (
   new_password: string,
   re_new_password: string,
@@ -43,6 +85,10 @@ const resetPasswordConfirm = (
   );
 };
 
+/**
+ * Exports authentication-related actions.
+ * @returns {Object} An object containing all the auth actions.
+ */
 export const AuthActions = () => {
   return {
     login,
@@ -51,7 +97,6 @@ export const AuthActions = () => {
     register,
     resetPassword,
     storeToken,
-    getRefreshToken,
-    getAccessToken,
+    getToken,
   };
 };
