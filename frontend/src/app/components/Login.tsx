@@ -31,7 +31,7 @@ const Login = () => {
         router.push("dashboard");
       })
       .catch((err) => {
-        setError("root", { type: "onChange", message: err.json.detail });
+        setError("root", { type: "manual", message: err.json.detail });
       });
   };
 
