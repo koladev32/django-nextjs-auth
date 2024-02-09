@@ -4,6 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type FormData = {
   email: string;
@@ -77,6 +78,14 @@ const Login = () => {
             <span className="text-xs text-red-600">{errors.root.message}</span>
           )}
         </form>
+        <div className="mt-6 text-center">
+          <Link
+            href="/auth/password/reset-password"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
       </div>
     </div>
   );
