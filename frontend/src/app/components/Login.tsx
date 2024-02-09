@@ -3,6 +3,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { AuthActions } from "@/app/auth/utils";
+import { useRouter } from "next/navigation";
 
 type FormData = {
   email: string;
@@ -17,12 +18,21 @@ const Login = () => {
     setError,
   } = useForm<FormData>();
 
-  const { login } = AuthActions();
+  const router = useRouter();
+
+  const { login, storeToken } = AuthActions();
 
   const onSubmit = (data: { email: string; password: string }) => {
-    login(data.email, data.password).catch((err) => {
-      setError("root", { type: "onChange", message: err.json.detail });
-    });
+    login(data.email, data.password)
+      .json((json) => {
+        storeToken(json.access, "access");
+        storeToken(json.refresh, "refresh");
+
+        router.push("dashboard");
+      })
+      .catch((err) => {
+        setError("root", { type: "onChange", message: err.json.detail });
+      });
   };
 
   return (

@@ -39,12 +39,16 @@ const register = (email: string, password: string) => {
  * @returns {Promise} A promise that resolves with the login response.
  */
 const login = (email: string, password: string) => {
-  return api
-    .post({ username: email, password }, "/auth/jwt/create")
-    .json((json) => {
-      storeToken(json.access, "access");
-      storeToken(json.refresh, "refresh");
-    });
+  return api.post({ username: email, password }, "/auth/jwt/create");
+};
+
+/**
+ * Logout a user.
+ * @returns {Promise} A promise that resolves with the login response.
+ */
+const logout = () => {
+  const refreshToken = getToken("refresh");
+  return api.post({ refresh: refreshToken }, "/auth/logout/");
 };
 
 /**
@@ -98,5 +102,6 @@ export const AuthActions = () => {
     resetPassword,
     storeToken,
     getToken,
+    logout,
   };
 };

@@ -7,36 +7,47 @@ const { handleJWTRefresh, storeToken, getToken } = AuthActions();
 /**
  * Configures the API with authentication and automatic token refresh on 401 responses.
  */
-const api = wretch("http://localhost:8000")
-  // Initialize authentication with the access token.
-  .auth(`Bearer ${getToken("access")}`)
-  // Catch 401 errors to refresh the token and retry the request.
-  .catcher(401, async (error: WretchError, request: Wretch) => {
-    try {
-      // Attempt to refresh the JWT token.
-      const newToken: string = await handleJWTRefresh().text();
+const api = (onRedirect?: () => void) => {
+  return (
+    wretch("http://localhost:8000")
+      // Initialize authentication with the access token.
+      .auth(`Bearer ${getToken("access")}`)
+      // Catch 401 errors to refresh the token and retry the request.
+      .catcher(401, async (error: WretchError, request: Wretch) => {
+        try {
+          // Attempt to refresh the JWT token.
+          const { access } = (await handleJWTRefresh().json()) as {
+            access: string;
+          };
 
-      // Store the new access token.
-      storeToken(newToken, "access");
+          // Store the new access token.
+          storeToken(access, "access");
 
-      // Replay the original request with the new access token.
-      return request
-        .auth(`Bearer ${newToken}`)
-        .fetch()
-        .unauthorized((err: WretchError) => {
-          // Rethrow the error if unauthorized after token refresh.
-          throw err;
-        })
-        .json();
-    } catch (err) {
-      // Handle or log the error as needed.
-      throw err;
-    }
-  });
+          // Replay the original request with the new access token.
+          return request
+            .auth(`Bearer ${access}`)
+            .fetch()
+            .unauthorized(() => {
+              // Rethrow the error if unauthorized after token refresh.
+              onRedirect && onRedirect();
+            })
+            .json();
+        } catch (err) {
+          onRedirect && onRedirect();
+        }
+      })
+  );
+};
 
 /**
  * Fetches data from the specified URL, automatically handling authentication and token refresh.
- * @param {string} url - The URL to fetch data from.
  * @returns {Promise<any>} The promise resolving to the fetched data.
+ * @param args
  */
-export const fetcher = (url: string): Promise<any> => api.get(url).json();
+export const fetcher = (
+  args: [url: string, onRedirect: () => void],
+): Promise<any> => {
+  const [url, onRedirect] = args;
+  console.log(url, onRedirect);
+  return api(onRedirect).get(url).json();
+};
