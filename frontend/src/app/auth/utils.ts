@@ -67,7 +67,7 @@ const handleJWTRefresh = () => {
  * @returns {Promise} A promise that resolves with the password reset response.
  */
 const resetPassword = (email: string) => {
-  return api.post({ email }, "/users/reset_password");
+  return api.post({ email }, "/auth/users/reset_password/");
 };
 
 /**
