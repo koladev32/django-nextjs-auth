@@ -140,7 +140,7 @@ CORS_ALLOWED_ORIGINS = [
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "#http://localhost:3000/auth/reset-password-confirmation/?uid={uid}&token={token}",
+    "PASSWORD_RESET_CONFIRM_URL": "http://localhost:3000/auth/reset-password-confirmation/?uid={uid}&token={token}",
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
     "SERIALIZERS": {},
