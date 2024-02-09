@@ -4,22 +4,28 @@ import useSWR from "swr";
 import { fetcher } from "@/app/fetcher";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 export default function Home() {
   const router = useRouter();
 
-  const { data: user } = useSWR(
-    ["/auth/users/me", () => router.push("/")],
-    fetcher,
-  );
+  const redirectToLogin = useMemo(() => {
+    return () => router.push("/");
+  }, [router]);
 
-  const { logout } = AuthActions();
+  const { data: user } = useSWR(["/auth/users/me", redirectToLogin], fetcher);
+
+  const { logout, removeTokens } = AuthActions();
 
   const handleLogout = () => {
     logout()
-      .res(() => router.push("/"))
-      .catch((err) => {
-        console.log(err);
+      .res(() => {
+        removeTokens();
+
+        router.push("/");
+      })
+      .catch(() => {
+        removeTokens();
         router.push("/");
       });
   };

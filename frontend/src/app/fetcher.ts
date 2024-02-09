@@ -45,9 +45,8 @@ const api = (onRedirect?: () => void) => {
  * @param args
  */
 export const fetcher = (
-  args: [url: string, onRedirect: () => void],
+  args: [url: string, onRedirect: () => void]
 ): Promise<any> => {
   const [url, onRedirect] = args;
-  console.log(url, onRedirect);
   return api(onRedirect).get(url).json();
 };

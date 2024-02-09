@@ -23,6 +23,14 @@ const getToken = (type: string) => {
 };
 
 /**
+ * Removes both access and refresh tokens from cookies.
+ */
+const removeTokens = () => {
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
+};
+
+/**
  * Registers a new user.
  * @param {string} email - The email of the account.
  * @param {string} username - The username of the account.
@@ -82,11 +90,11 @@ const resetPasswordConfirm = (
   new_password: string,
   re_new_password: string,
   token: string,
-  uid: string,
+  uid: string
 ) => {
   return api.post(
     { uid, token, new_password, re_new_password },
-    "/auth/users/reset_password_confirm/",
+    "/auth/users/reset_password_confirm/"
   );
 };
 
@@ -104,5 +112,6 @@ export const AuthActions = () => {
     storeToken,
     getToken,
     logout,
+    removeTokens,
   };
 };
