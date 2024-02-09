@@ -36,10 +36,10 @@ const ResetPasswordConfirmation = () => {
         data.password,
         data.password,
         token,
-        uid
+        uid,
       ).res();
       alert("Password has been reset successfully.");
-      router.push("/login");
+      router.push("/");
     } catch (err) {
       alert("Failed to reset password. Please try again.");
     }
