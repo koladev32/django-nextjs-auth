@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAppDispatch, useAppStore } from "@/redux-lib/hooks";
+import authSlice from "@/redux-lib/slices";
 
 type FormData = {
   email: string;
@@ -21,6 +23,8 @@ const Login = () => {
 
   const router = useRouter();
 
+  const dispatch = useAppDispatch();
+
   const { login, storeToken } = AuthActions();
 
   const onSubmit = (data: FormData) => {
@@ -28,6 +32,8 @@ const Login = () => {
       .json((json) => {
         storeToken(json.access, "access");
         storeToken(json.refresh, "refresh");
+
+        dispatch(authSlice.actions.setAuthStatus({ isAuthenticated: true }));
 
         router.push("dashboard");
       })

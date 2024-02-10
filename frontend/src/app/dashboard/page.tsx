@@ -5,27 +5,29 @@ import { fetcher } from "@/app/fetcher";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import authSlice from "@/redux-lib/slices";
+import { useAppDispatch } from "@/redux-lib/hooks";
 
 export default function Home() {
   const router = useRouter();
 
-  const redirectToLogin = useMemo(() => {
-    return () => router.push("/");
-  }, [router]);
-
-  const { data: user } = useSWR(["/auth/users/me", redirectToLogin], fetcher);
+  const { data: user } = useSWR("/auth/users/me", fetcher);
 
   const { logout, removeTokens } = AuthActions();
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     logout()
       .res(() => {
-        removeTokens();
-
-        router.push("/");
+        console.log("Successful logout");
       })
       .catch(() => {
+        console.error("An error occurred. Log this.");
+      })
+      .finally(() => {
         removeTokens();
+        dispatch(authSlice.actions.setAuthStatus({ isAuthenticated: true }));
+
         router.push("/");
       });
   };

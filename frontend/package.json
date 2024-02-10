@@ -16,6 +16,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",
     "react-redux": "^9.1.0",
+    "redux-persist": "^6.0.0",
     "swr": "^2.2.4",
     "wretch": "^2.8.0"
   },
@@ -24,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/redux-persist": "^4.3.1",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
