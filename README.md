@@ -26,6 +26,11 @@ git clone https://github.com/koladev32/django-nextjs-auth.git && cd django-nextj
 
 Run the `setup.sh` script to handle dependencies installation on the backend and the frontend. 
 
+```shell
+chmod +x setup.sh
+./setup.sh
+```
+
 To start the application, run the following commands. 
 
 ```bash
