@@ -120,6 +120,11 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
+
+SITE_NAME = "Test Django Next.js"
+
+DOMAIN = 'localhost:3000'
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
@@ -140,10 +145,8 @@ CORS_ALLOWED_ORIGINS = [
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "http://localhost:3000/auth/password/reset-password-confirmation/?uid={uid}&token={token}",
+    "PASSWORD_RESET_CONFIRM_URL": "auth/password/reset-password-confirmation/?uid={uid}&token={token}",
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
     "SERIALIZERS": {},
 }
-
-SITE_NAME = "Test Django Next.js"
