@@ -2,7 +2,6 @@ import wretch, { Wretch, WretchError } from "wretch";
 import { AuthActions } from "@/app/auth/utils";
 import { store } from "@/redux-lib/store";
 import authSlice from "@/redux-lib/slices";
-import { sort } from "next/dist/build/webpack/loaders/css-loader/src/utils";
 
 // Extract necessary functions from the AuthActions utility.
 const { handleJWTRefresh, storeToken, getToken } = AuthActions();

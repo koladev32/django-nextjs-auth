@@ -4,7 +4,6 @@ import useSWR from "swr";
 import { fetcher } from "@/app/fetcher";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
 import authSlice from "@/redux-lib/slices";
 import { useAppDispatch } from "@/redux-lib/hooks";
 

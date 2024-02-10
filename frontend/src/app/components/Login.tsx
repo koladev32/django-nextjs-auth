@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAppDispatch, useAppStore } from "@/redux-lib/hooks";
+import { useAppDispatch } from "@/redux-lib/hooks";
 import authSlice from "@/redux-lib/slices";
 
 type FormData = {
