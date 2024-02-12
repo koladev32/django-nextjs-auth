@@ -35,7 +35,7 @@ const Login = () => {
 
         dispatch(authSlice.actions.setAuthStatus({ isAuthenticated: true }));
 
-        router.push("dashboard");
+        router.push("/dashboard");
       })
       .catch((err) => {
         setError("root", { type: "manual", message: err.json.detail });

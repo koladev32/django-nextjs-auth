@@ -32,10 +32,12 @@ const api = () => {
             .unauthorized(() => {
               // Rethrow the error if unauthorized after token refresh.
               store().dispatch(authSlice.actions.setLogout());
+              window.location.replace("/");
             })
             .json();
         } catch (err) {
           store().dispatch(authSlice.actions.setLogout());
+          window.location.replace("/");
         }
       })
   );
