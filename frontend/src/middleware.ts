@@ -5,12 +5,6 @@ export function middleware(request: NextRequest) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");
 
-  if (accessToken && request.nextUrl.pathname !== "/dashboard") {
-    return NextResponse.redirect(
-      new URL(request.nextUrl.pathname, request.url),
-    );
-  }
-
   if (!accessToken && request.nextUrl.pathname !== "/") {
     return NextResponse.redirect(new URL("/", request.url));
   }
