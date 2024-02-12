@@ -5,7 +5,7 @@ import { store } from "@/redux-lib/store";
 export function middleware(request: NextRequest) {
   const { auth } = store().getState();
 
-  if (auth?.isAuthenticated) {
+  if (auth?.isAuthenticated && request.nextUrl.pathname !== "/dashboard") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
