@@ -4,16 +4,11 @@ import useSWR from "swr";
 import { fetcher } from "@/app/fetcher";
 import { AuthActions } from "@/app/auth/utils";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
 
 export default function Home() {
   const router = useRouter();
 
-  const redirectToLogin = useMemo(() => {
-    return () => router.push("/");
-  }, [router]);
-
-  const { data: user } = useSWR(["/auth/users/me", redirectToLogin], fetcher);
+  const { data: user } = useSWR("/auth/users/me", fetcher);
 
   const { logout, removeTokens } = AuthActions();
 

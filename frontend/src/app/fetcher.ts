@@ -7,7 +7,7 @@ const { handleJWTRefresh, storeToken, getToken } = AuthActions();
 /**
  * Configures the API with authentication and automatic token refresh on 401 responses.
  */
-const api = (onRedirect?: () => void) => {
+const api = () => {
   return (
     wretch("http://localhost:8000")
       // Initialize authentication with the access token.
@@ -29,11 +29,11 @@ const api = (onRedirect?: () => void) => {
             .fetch()
             .unauthorized(() => {
               // Rethrow the error if unauthorized after token refresh.
-              onRedirect && onRedirect();
+              window.location.replace("/");
             })
             .json();
         } catch (err) {
-          onRedirect && onRedirect();
+          window.location.replace("/");
         }
       })
   );
@@ -42,11 +42,8 @@ const api = (onRedirect?: () => void) => {
 /**
  * Fetches data from the specified URL, automatically handling authentication and token refresh.
  * @returns {Promise<any>} The promise resolving to the fetched data.
- * @param args
+ * @param url
  */
-export const fetcher = (
-  args: [url: string, onRedirect: () => void]
-): Promise<any> => {
-  const [url, onRedirect] = args;
-  return api(onRedirect).get(url).json();
+export const fetcher = (url: string): Promise<any> => {
+  return api().get(url).json();
 };
